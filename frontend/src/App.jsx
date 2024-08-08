@@ -250,6 +250,7 @@ const App = () => {
       </Togglable>
 
       <br />
+      <h3>Blogs</h3>
       <div>
         <SortMenu onSelect={selectSort} />
         {blogs.map(blog =>
