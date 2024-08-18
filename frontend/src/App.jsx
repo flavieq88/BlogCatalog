@@ -1,39 +1,38 @@
-import { useState, useEffect, useRef } from 'react';
-import Blog from './components/Blog';
-import Notification from './components/Notification';
-import BlogForm from './components/BlogForm';
-import SortMenu from './components/SortMenu';
-import Togglable from './components/Togglable';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
-import blogService from './services/blogs';
-import loginService from './services/login';
-import userService from './services/users';
+import { useState, useEffect, useRef } from "react";
+import Blog from "./components/Blog";
+import Notification from "./components/Notification";
+import BlogForm from "./components/BlogForm";
+import SortMenu from "./components/SortMenu";
+import Togglable from "./components/Togglable";
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
+import blogService from "./services/blogs";
+import loginService from "./services/login";
+import userService from "./services/users";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [newUsername, setNewUsername] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [newName, setNewName] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newName, setNewName] = useState("");
   const [user, setUser] = useState(null);
-  const [notif, setNotif] = useState({ text: null, color: 'green' });
-  const [sorting, setSorting] = useState('likes');
+  const [notif, setNotif] = useState({ text: null, color: "green" });
+  const [sorting, setSorting] = useState("likes");
 
   const timeNotif = 1500; //length of time in ms notification is displayed
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
+    blogService.getAll().then((blogs) => {
       const sortedBlogs = [...blogs];
       sortedBlogs.sort((a, b) => b.likes - a.likes);
       setBlogs(sortedBlogs);
     });
   }, [user]);
 
-
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -54,25 +53,23 @@ const App = () => {
       });
 
       blogService.setToken(user.token);
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      );
+      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
 
-      setNotif({ text:`${user.name} successfully signed in`, color:'green' });
+      setNotif({ text: `${user.name} successfully signed in`, color: "green" });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
 
       setUser(user);
-      setUsername('');
-      setPassword('');
+      setUsername("");
+      setPassword("");
     } catch (exception) {
-      setNotif({ text:'Wrong username or password', color:'red' });
+      setNotif({ text: "Wrong username or password", color: "red" });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
-      setUsername('');
-      setPassword('');
+      setUsername("");
+      setPassword("");
     }
   };
 
@@ -83,7 +80,7 @@ const App = () => {
       await userService.signup({
         username: newUsername,
         name: newName,
-        password: newPassword
+        password: newPassword,
       });
 
       const user = await loginService.login({
@@ -92,40 +89,36 @@ const App = () => {
       });
 
       blogService.setToken(user.token);
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      );
+      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
 
-      setNotif({ text:`${user.name} successfully signed in`, color:'green' });
+      setNotif({ text: `${user.name} successfully signed in`, color: "green" });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
 
       setUser(user);
-      setNewUsername('');
-      setNewPassword('');
-      setNewName('');
-
+      setNewUsername("");
+      setNewPassword("");
+      setNewName("");
     } catch (exception) {
-      if (exception.response.data.error.includes('unique')) {
-        setNotif({ text: 'Username already taken', color:'red' });
+      if (exception.response.data.error.includes("unique")) {
+        setNotif({ text: "Username already taken", color: "red" });
+      } else {
+        setNotif({ text: exception.response.data.error, color: "red" });
       }
-      else {
-        setNotif({ text: exception.response.data.error, color:'red' });
-      };
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
-      setNewUsername('');
-      setNewPassword('');
-      setNewName('');
+      setNewUsername("");
+      setNewPassword("");
+      setNewName("");
     }
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogAppUser');
+    window.localStorage.removeItem("loggedBlogAppUser");
     setUser(null);
-    setNotif({ text:'Successfully signed out', color:'green' });
+    setNotif({ text: "Successfully signed out", color: "green" });
     setTimeout(() => {
       setNotif({ ...notif, text: null });
     }, timeNotif);
@@ -134,7 +127,7 @@ const App = () => {
   const selectSort = (state) => {
     setSorting(state);
     const sortedBlogs = [...blogs];
-    if (state==='likes') {
+    if (state === "likes") {
       sortedBlogs.sort((a, b) => b[state] - a[state]);
     } else {
       sortedBlogs.sort((a, b) => a[state].localeCompare(b[state]));
@@ -148,7 +141,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility();
       const returnedBlog = await blogService.create(blogObject);
       const sortedBlogs = blogs.concat({ ...returnedBlog, user: user });
-      if (sorting==='likes') {
+      if (sorting === "likes") {
         sortedBlogs.sort((a, b) => b[sorting] - a[sorting]);
       } else {
         sortedBlogs.sort((a, b) => a[sorting].localeCompare(b[sorting]));
@@ -156,17 +149,19 @@ const App = () => {
 
       setBlogs(sortedBlogs);
 
-      setNotif({ text:`New blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color:'green' });
+      setNotif({
+        text: `New blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
+        color: "green",
+      });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
-
     } catch (exception) {
       if (exception.response.status === 401) {
-        window.localStorage.removeItem('loggedBlogAppUser');
+        window.localStorage.removeItem("loggedBlogAppUser");
         setUser(null);
       }
-      setNotif({ text:'Failed to add blog', color:'red' });
+      setNotif({ text: "Failed to add blog", color: "red" });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
@@ -178,14 +173,19 @@ const App = () => {
       const newBlog = { ...blogObject, user: blogObject.user.id };
       const returnedBlog = await blogService.update(newBlog);
       returnedBlog.user = blogObject.user;
-      const newBlogs = blogs.map(blog => blog.id === blogObject.id ? returnedBlog : blog);
-      if (sorting==='likes') {
+      const newBlogs = blogs.map((blog) =>
+        blog.id === blogObject.id ? returnedBlog : blog,
+      );
+      if (sorting === "likes") {
         newBlogs.sort((a, b) => b[sorting] - a[sorting]);
       }
       setBlogs(newBlogs);
     } catch (exception) {
-      setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
-      setNotif({ text:'This blog has already been deleted from server', color:'red' });
+      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
+      setNotif({
+        text: "This blog has already been deleted from server",
+        color: "red",
+      });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
@@ -195,17 +195,20 @@ const App = () => {
   const handleDeleteBlog = async (blogObject) => {
     try {
       await blogService.deleteBlog(blogObject.id);
-      setBlogs(blogs.filter(blog => blog.id !== blogObject.id));
-      setNotif({ text:`Deleted "${blogObject.title}" by ${blogObject.author}`, color:'green' });
+      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
+      setNotif({
+        text: `Deleted "${blogObject.title}" by ${blogObject.author}`,
+        color: "green",
+      });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
     } catch (exception) {
       if (exception.response.status === 401) {
-        window.localStorage.removeItem('loggedBlogAppUser');
+        window.localStorage.removeItem("loggedBlogAppUser");
         setUser(null);
       }
-      setNotif({ text: 'failed to delete blog', color:'red' });
+      setNotif({ text: "failed to delete blog", color: "red" });
       setTimeout(() => {
         setNotif({ ...notif, text: null });
       }, timeNotif);
@@ -241,11 +244,12 @@ const App = () => {
   return (
     <div>
       <h2>BlogCatalog</h2>
-      <Notification text={notif.text} color={notif.color}/>
+      <Notification text={notif.text} color={notif.color} />
       <p>
-        {user.name} is signed in. <button onClick={handleLogout}>Log out</button>
+        {user.name} is signed in.{" "}
+        <button onClick={handleLogout}>Log out</button>
       </p>
-      <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
         <BlogForm addBlog={addBlog} />
       </Togglable>
 
@@ -253,9 +257,15 @@ const App = () => {
       <h3>Blogs</h3>
       <div>
         <SortMenu onSelect={selectSort} />
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} handleDelete={handleDeleteBlog} user={user} />
-        )}
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            handleDelete={handleDeleteBlog}
+            user={user}
+          />
+        ))}
       </div>
     </div>
   );

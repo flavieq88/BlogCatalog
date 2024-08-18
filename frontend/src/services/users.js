@@ -1,5 +1,5 @@
-import axios from 'axios';
-const baseUrl = '/api/users';
+import axios from "axios";
+const baseUrl = "/api/users";
 
 const signup = async (user) => {
   const response = await axios.post(baseUrl, user);

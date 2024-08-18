@@ -5,10 +5,10 @@ const SortMenu = ({ onSelect }) => {
   return (
     <div>
       Sort blogs by:&nbsp;
-      <select name='sort' id='sort' onChange={changeSelect}>
-        <option value='likes'>likes</option>
-        <option value='title'>title</option>
-        <option value='author'>author</option>
+      <select name="sort" id="sort" onChange={changeSelect}>
+        <option value="likes">likes</option>
+        <option value="title">title</option>
+        <option value="author">author</option>
       </select>
     </div>
   );

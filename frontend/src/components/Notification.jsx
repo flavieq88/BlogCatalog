@@ -5,16 +5,16 @@ const Notification = ({ text, color }) => {
 
   const notificationStyle = {
     color: color,
-    background: 'lightgrey',
+    background: "lightgrey",
     fontSize: 20,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
   };
 
   return (
-    <div className='notification' style={notificationStyle}>
+    <div className="notification" style={notificationStyle}>
       {text}
     </div>
   );

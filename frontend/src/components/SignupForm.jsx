@@ -1,36 +1,44 @@
-const SignupForm = ({ username, password, name, handleUsernameChange, handlePasswordChange, handleNameChange, handleSubmit }) => {
+const SignupForm = ({
+  username,
+  password,
+  name,
+  handleUsernameChange,
+  handlePasswordChange,
+  handleNameChange,
+  handleSubmit,
+}) => {
   return (
-    <div className='signupForm'>
+    <div className="signupForm">
       <h4>Don't own an account? Sign up for free!</h4>
       <form onSubmit={handleSubmit}>
         <div>
           Username:
           <input
-            type='text'
+            type="text"
             value={username}
-            name='Username'
+            name="Username"
             onChange={handleUsernameChange}
-            data-testid='newusername'
+            data-testid="newusername"
           />
         </div>
         <div>
           Name:
           <input
-            type='text'
+            type="text"
             value={name}
-            name='Name'
+            name="Name"
             onChange={handleNameChange}
-            data-testid='newname'
+            data-testid="newname"
           />
         </div>
         <div>
           Password:
           <input
-            type='password'
+            type="password"
             value={password}
-            name='Password'
+            name="Password"
             onChange={handlePasswordChange}
-            data-testid='newpassword'
+            data-testid="newpassword"
           />
         </div>
         <button type="submit">Sign up</button>
