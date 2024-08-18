@@ -1,5 +1,9 @@
-const Notification = ({ text, color }) => {
-  if (text === null) {
+import { useSelector } from "react-redux";
+
+const Notification = () => {
+  const { message, color } = useSelector((state) => state.notification);
+
+  if (message === null) {
     return null;
   }
 
@@ -15,7 +19,7 @@ const Notification = ({ text, color }) => {
 
   return (
     <div className="notification" style={notificationStyle}>
-      {text}
+      {message}
     </div>
   );
 };

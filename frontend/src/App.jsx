@@ -1,14 +1,20 @@
 import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
+import BlogList from "./components/BlogList";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import SortMenu from "./components/SortMenu";
 import Togglable from "./components/Togglable";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
+
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import userService from "./services/users";
+
+import { notify } from "./reducers/notifReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
+import { setUser, clearUser, loginUser } from "./reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -17,11 +23,13 @@ const App = () => {
   const [newUsername, setNewUsername] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newName, setNewName] = useState("");
-  const [user, setUser] = useState(null);
-  const [notif, setNotif] = useState({ text: null, color: "green" });
   const [sorting, setSorting] = useState("likes");
 
-  const timeNotif = 1500; //length of time in ms notification is displayed
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+
+  const timeNotif = 2; //length of time in s notification is displayed
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -36,41 +44,24 @@ const App = () => {
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      dispatch(setUser(user));
       blogService.setToken(user.token);
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
+  }, [user]);
 
   const blogFormRef = useRef();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
+    dispatch(loginUser(username, password));
 
-      blogService.setToken(user.token);
-      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-
-      setNotif({ text: `${user.name} successfully signed in`, color: "green" });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
-
-      setUser(user);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setNotif({ text: "Wrong username or password", color: "red" });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
-      setUsername("");
-      setPassword("");
-    }
+    setUsername("");
+    setPassword("");
   };
 
   const handleSignup = async (event) => {
@@ -91,10 +82,12 @@ const App = () => {
       blogService.setToken(user.token);
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
 
-      setNotif({ text: `${user.name} successfully signed in`, color: "green" });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
+      dispatch(
+        notify(
+          { message: `${user.name} successfully signed in`, color: "green" },
+          timeNotif,
+        ),
+      );
 
       setUser(user);
       setNewUsername("");
@@ -102,13 +95,20 @@ const App = () => {
       setNewName("");
     } catch (exception) {
       if (exception.response.data.error.includes("unique")) {
-        setNotif({ text: "Username already taken", color: "red" });
+        dispatch(
+          notify(
+            { message: "Username already taken", color: "red" },
+            timeNotif,
+          ),
+        );
       } else {
-        setNotif({ text: exception.response.data.error, color: "red" });
+        dispatch(
+          notify(
+            { message: exception.response.data.error, color: "red" },
+            timeNotif,
+          ),
+        );
       }
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
       setNewUsername("");
       setNewPassword("");
       setNewName("");
@@ -117,11 +117,10 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
-    setUser(null);
-    setNotif({ text: "Successfully signed out", color: "green" });
-    setTimeout(() => {
-      setNotif({ ...notif, text: null });
-    }, timeNotif);
+    dispatch(clearUser());
+    dispatch(
+      notify({ message: "Successfully signed out", color: "green" }, timeNotif),
+    );
   };
 
   const selectSort = (state) => {
@@ -149,69 +148,29 @@ const App = () => {
 
       setBlogs(sortedBlogs);
 
-      setNotif({
-        text: `New blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
-        color: "green",
-      });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
-    } catch (exception) {
-      if (exception.response.status === 401) {
-        window.localStorage.removeItem("loggedBlogAppUser");
-        setUser(null);
-      }
-      setNotif({ text: "Failed to add blog", color: "red" });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
-    }
-  };
-
-  const updateBlog = async (blogObject) => {
-    try {
-      const newBlog = { ...blogObject, user: blogObject.user.id };
-      const returnedBlog = await blogService.update(newBlog);
-      returnedBlog.user = blogObject.user;
-      const newBlogs = blogs.map((blog) =>
-        blog.id === blogObject.id ? returnedBlog : blog,
+      dispatch(
+        notify(
+          {
+            message: `New blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
+            color: "green",
+          },
+          timeNotif,
+        ),
       );
-      if (sorting === "likes") {
-        newBlogs.sort((a, b) => b[sorting] - a[sorting]);
-      }
-      setBlogs(newBlogs);
-    } catch (exception) {
-      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
-      setNotif({
-        text: "This blog has already been deleted from server",
-        color: "red",
-      });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
-    }
-  };
-
-  const handleDeleteBlog = async (blogObject) => {
-    try {
-      await blogService.deleteBlog(blogObject.id);
-      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
-      setNotif({
-        text: `Deleted "${blogObject.title}" by ${blogObject.author}`,
-        color: "green",
-      });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
     } catch (exception) {
       if (exception.response.status === 401) {
         window.localStorage.removeItem("loggedBlogAppUser");
         setUser(null);
       }
-      setNotif({ text: "failed to delete blog", color: "red" });
-      setTimeout(() => {
-        setNotif({ ...notif, text: null });
-      }, timeNotif);
+      dispatch(
+        notify(
+          {
+            message: "Failed to add blog",
+            color: "red",
+          },
+          timeNotif,
+        ),
+      );
     }
   };
 
@@ -219,7 +178,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to BlogCatalog</h2>
-        <Notification text={notif.text} color={notif.color} />
+        <Notification />
         <LoginForm
           username={username}
           password={password}
@@ -244,7 +203,7 @@ const App = () => {
   return (
     <div>
       <h2>BlogCatalog</h2>
-      <Notification text={notif.text} color={notif.color} />
+      <Notification />
       <p>
         {user.name} is signed in.{" "}
         <button onClick={handleLogout}>Log out</button>
@@ -257,15 +216,7 @@ const App = () => {
       <h3>Blogs</h3>
       <div>
         <SortMenu onSelect={selectSort} />
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            handleDelete={handleDeleteBlog}
-            user={user}
-          />
-        ))}
+        <BlogList />
       </div>
     </div>
   );
