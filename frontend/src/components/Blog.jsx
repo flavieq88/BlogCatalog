@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { likeBlog, removeBlog } from "../reducers/blogReducer";
+import { likeBlog, removeBlog, commentBlog } from "../reducers/blogReducer";
 
 import { useNavigate } from "react-router-dom";
+
+import { useField } from "../hooks";
 
 const Blog = ({ blog }) => {
   const [extended, setExtended] = useState(false);
@@ -10,6 +12,8 @@ const Blog = ({ blog }) => {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
+
+  const [comment, commentActions] = useField("text", "Add a comment");
 
   if (!blog) {
     return null;
@@ -46,6 +50,12 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const handleComment = (event) => {
+    event.preventDefault();
+    dispatch(commentBlog(comment.value, blog));
+    commentActions.reset();
+  };
+
   return (
     <div style={blogStyle} className="blog">
       {blog.title}, by {blog.author}{" "}
@@ -62,7 +72,15 @@ const Blog = ({ blog }) => {
         <h4>Comments</h4>
         {blog.comments.length === 0
           ? "No comments"
-          : blog.comments.map((comment) => <p>{comment}</p>)}
+          : blog.comments.map((comment) => (
+              <div key={comment.id}>
+                {comment.text} {comment.user}
+              </div>
+            ))}
+        <form onSubmit={handleComment}>
+          <input {...comment} />
+          <button type="submit">Comment</button>
+        </form>
       </div>
     </div>
   );

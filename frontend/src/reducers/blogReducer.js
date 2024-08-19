@@ -36,15 +36,52 @@ export const initializeBlogs = () => {
 
 export const likeBlog = (blog) => {
   return async (dispatch) => {
-    const changedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    const changedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+      comments: blog.comments.map((comment) => comment.id),
+    };
     try {
       const response = await blogService.update(changedBlog);
-      dispatch(updateBlog({ ...response, user: blog.user }));
+      dispatch(
+        updateBlog({ ...response, user: blog.user, comments: blog.comments }),
+      );
     } catch (exception) {
       dispatch(
         notify(
           {
             message: "This blog has already been deleted from server",
+            color: "red",
+          },
+          2,
+        ),
+      );
+    }
+  };
+};
+
+export const commentBlog = (text, blog) => {
+  return async (dispatch) => {
+    try {
+      const response = await blogService.postComment(text, blog.id);
+      dispatch(
+        updateBlog({ ...blog, comments: blog.comments.concat(response) }),
+      );
+      dispatch(
+        notify(
+          {
+            message: `You commented ${text}`,
+            color: "green",
+          },
+          2,
+        ),
+      );
+    } catch (exception) {
+      dispatch(
+        notify(
+          {
+            message: "Failed to add comment",
             color: "red",
           },
           2,

@@ -53,9 +53,6 @@ const App = () => {
   if (!user) {
     return (
       <div>
-        <Routes>
-          <Route path="*" element={<Navigate replace to="/" />} />
-        </Routes>
         <h1>BlogCatalog</h1>
         <Notification />
         <h2>Log in to BlogCatalog</h2>
@@ -76,7 +73,6 @@ const App = () => {
         <Route path="/blogs/:id" element={<Blog blog={individualBlog} />} />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User user={individualUser} />} />
-        <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
     </div>
   );
