@@ -1,31 +1,29 @@
-const LoginForm = ({
-  username,
-  password,
-  handleUsernameChange,
-  handlePasswordChange,
-  handleSubmit,
-}) => {
+import { useField } from "../hooks";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../reducers/userReducer";
+
+const LoginForm = () => {
+  const [username, usernameActions] = useField("text", "Username");
+  const [password, passwordActions] = useField("password", "Password");
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    dispatch(loginUser(username.value, password.value));
+
+    usernameActions.reset();
+    passwordActions.reset();
+  };
+
   return (
     <form onSubmit={handleSubmit} className="loginForm">
       <div>
-        Username:
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={handleUsernameChange}
-          data-testid="username"
-        />
+        <input {...username} />
       </div>
       <div>
-        Password:
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={handlePasswordChange}
-          data-testid="password"
-        />
+        <input {...password} />
       </div>
       <button type="submit">Log in</button>
     </form>

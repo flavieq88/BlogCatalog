@@ -1,7 +1,13 @@
-const SortMenu = ({ onSelect }) => {
+import { useDispatch } from "react-redux";
+import { filterChange } from "../reducers/filterReducer";
+
+const SortMenu = () => {
+  const dispatch = useDispatch();
+
   const changeSelect = (event) => {
-    onSelect(event.target.value);
+    dispatch(filterChange(event.target.value));
   };
+
   return (
     <div>
       Sort blogs by:&nbsp;

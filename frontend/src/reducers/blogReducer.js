@@ -11,7 +11,7 @@ const blogSlice = createSlice({
       return action.payload;
     },
     appendBlog(state, action) {
-      return state.push(action.payload);
+      state.push(action.payload);
     },
     updateBlog(state, action) {
       const id = action.payload.id;
@@ -36,10 +36,10 @@ export const initializeBlogs = () => {
 
 export const likeBlog = (blog) => {
   return async (dispatch) => {
-    const changedBlog = { ...blog, likes: blog.likes + 1 };
+    const changedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
     try {
       const response = await blogService.update(changedBlog);
-      dispatch(updateBlog(response));
+      dispatch(updateBlog({ ...response, user: blog.user }));
     } catch (exception) {
       dispatch(
         notify(
@@ -73,16 +73,68 @@ export const removeBlog = (blog) => {
       if (exception.response.status === 401) {
         window.localStorage.removeItem("loggedBlogAppUser");
         dispatch(clearUser());
+        dispatch(
+          notify(
+            {
+              message: "Failed to delete blog, session expired",
+              color: "red",
+            },
+            2,
+          ),
+        );
+      } else {
+        dispatch(
+          notify(
+            {
+              message: "Failed to delete blog",
+              color: "red",
+            },
+            2,
+          ),
+        );
       }
+    }
+  };
+};
+
+export const addBlog = (blog, user) => {
+  return async (dispatch) => {
+    try {
+      const newBlog = await blogService.create(blog);
+      dispatch(appendBlog({ ...newBlog, user }));
       dispatch(
         notify(
           {
-            message: "Failed to delete blog",
-            color: "red",
+            message: `New blog "${newBlog.title}" by ${newBlog.author} added`,
+            color: "green",
           },
           2,
         ),
       );
+    } catch (exception) {
+      if (exception.response.status === 401) {
+        window.localStorage.removeItem("loggedBlogAppUser");
+        dispatch(clearUser());
+        dispatch(
+          notify(
+            {
+              message: "Failed to add blog, session expired",
+              color: "red",
+            },
+            2,
+          ),
+        );
+      } else {
+        dispatch(
+          notify(
+            {
+              message: "Missing title, author or URL",
+              color: "red",
+            },
+            2,
+          ),
+        );
+      }
     }
   };
 };
