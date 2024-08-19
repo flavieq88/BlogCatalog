@@ -2,11 +2,18 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, removeBlog } from "../reducers/blogReducer";
 
+import { useNavigate } from "react-router-dom";
+
 const Blog = ({ blog }) => {
   const [extended, setExtended] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
+
+  if (!blog) {
+    return null;
+  }
 
   const blogStyle = {
     paddingTop: 10,
@@ -35,6 +42,7 @@ const Blog = ({ blog }) => {
   const handleDelete = (blog) => {
     if (window.confirm(`Delete blog "${blog.title}" by ${blog.author}?`)) {
       dispatch(removeBlog(blog));
+      navigate("/");
     }
   };
 
@@ -51,6 +59,10 @@ const Blog = ({ blog }) => {
         {blog.user.username === user.username && (
           <button onClick={() => handleDelete(blog)}>Delete blog</button>
         )}
+        <h4>Comments</h4>
+        {blog.comments.length === 0
+          ? "No comments"
+          : blog.comments.map((comment) => <p>{comment}</p>)}
       </div>
     </div>
   );

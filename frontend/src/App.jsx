@@ -4,13 +4,7 @@ import { initializeBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  Routes,
-  Route,
-  useMatch,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, useMatch, Navigate } from "react-router-dom";
 
 import blogService from "./services/blogs";
 import userService from "./services/users";
@@ -26,7 +20,6 @@ import NavBar from "./components/NavBar";
 
 const App = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
   const blogs = useSelector((state) => state.blogs);
@@ -45,10 +38,6 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs());
     userService.getUsers().then((response) => setUsers(response));
-
-    if (user === null) {
-      navigate("/login");
-    }
   }, [user]);
 
   const userMatch = useMatch("/users/:id");
@@ -61,31 +50,33 @@ const App = () => {
     ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null;
 
+  if (!user) {
+    return (
+      <div>
+        <Routes>
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+        <h1>BlogCatalog</h1>
+        <Notification />
+        <h2>Log in to BlogCatalog</h2>
+        <LoginForm />
+        <br />
+        <SignupForm />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h2>BlogCatalog</h2>
-      {user ? <NavBar /> : ""}
+      <h1>BlogCatalog</h1>
+      <NavBar />
       <Notification />
       <Routes>
         <Route path="/" element={<BlogList />} />
         <Route path="/blogs/:id" element={<Blog blog={individualBlog} />} />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User user={individualUser} />} />
-        <Route
-          path="/login"
-          element={
-            !user ? (
-              <div>
-                <h2>Log in to BlogCatalog</h2>
-                <LoginForm />
-                <br />
-                <SignupForm />
-              </div>
-            ) : (
-              <Navigate replace to="/" />
-            )
-          }
-        />
+        <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
     </div>
   );
