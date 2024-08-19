@@ -6,4 +6,9 @@ const signup = async (user) => {
   return response.data;
 };
 
-export default { signup };
+const getUsers = async () => {
+  const response = await axios.get(baseUrl);
+  return response.data;
+};
+
+export default { signup, getUsers };
