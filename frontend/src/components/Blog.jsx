@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, removeBlog } from "../reducers/blogReducer";
 
 const Blog = ({ blog }) => {
   const [extended, setExtended] = useState(false);
   const dispatch = useDispatch();
 
-  const user = {
-    username: "flavieq88",
-    name: "Flvaie Qin",
-  };
+  const user = useSelector((state) => state.user);
 
   const blogStyle = {
     paddingTop: 10,
