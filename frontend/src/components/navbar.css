@@ -1,0 +1,60 @@
+.navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #1e1c27;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+li {
+  float: left;
+  color: white;
+}
+
+li a {
+  text-decoration: none;
+  font-size: large;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 23px 13px;
+}
+
+li a:hover {
+  background-color: #666565;
+}
+
+.navblock {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 23px 16px;
+}
+
+.logo {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 19px 14px;
+  float: left;
+  font-size: x-large;
+}
+
+.navbutton {
+  background-color: #04aa6d;
+  border: none;
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  font-size: larger;
+  border-radius: 12px;
+  margin-top: 7px;
+  margin-right: 9px;
+}

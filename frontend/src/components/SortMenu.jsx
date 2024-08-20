@@ -1,7 +1,8 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { filterChange } from "../reducers/filterReducer";
 
 const SortMenu = () => {
+  const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
   const changeSelect = (event) => {
@@ -11,7 +12,7 @@ const SortMenu = () => {
   return (
     <div>
       Sort blogs by:&nbsp;
-      <select name="sort" id="sort" onChange={changeSelect}>
+      <select name="sort" id="sort" onChange={changeSelect} value={filter}>
         <option value="likes">likes</option>
         <option value="title">title</option>
         <option value="author">author</option>

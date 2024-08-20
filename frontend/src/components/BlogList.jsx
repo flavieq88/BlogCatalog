@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 
 import SortMenu from "./SortMenu";
-import BlogForm from "./BlogForm";
 
 import { Link } from "react-router-dom";
 
@@ -38,7 +37,6 @@ const BlogList = () => {
 
   return (
     <div>
-      <BlogForm />
       <h3>Browse blogs</h3>
       <SortMenu />
       {blogs.map((blog) => (

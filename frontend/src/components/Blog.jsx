@@ -46,7 +46,7 @@ const Blog = ({ blog }) => {
   const handleDelete = (blog) => {
     if (window.confirm(`Delete blog "${blog.title}" by ${blog.author}?`)) {
       dispatch(removeBlog(blog));
-      navigate("/");
+      navigate("/blogs");
     }
   };
 
@@ -69,7 +69,7 @@ const Blog = ({ blog }) => {
         {blog.user.username === user.username && (
           <button onClick={() => handleDelete(blog)}>Delete blog</button>
         )}
-        <h4>Comments</h4>
+        <h4>Comments:</h4>
         <p>
           {`${blog.comments.length} comment`}
           {blog.comments.length !== 1 && "s"}

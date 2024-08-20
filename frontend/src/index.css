@@ -1,4 +1,22 @@
 :root {
   background: rgb(255, 252, 213);
   text-align: center;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+}
+
+body {
+  margin: 0;
+  margin-top: 85px;
+}
+
+.headerLogin {
+  background-color: #1e1c27;
+  color: white;
+  padding: 19px 14px;
+  top: 0;
+  position: fixed;
+  font-size: x-large;
+  text-align: left;
+  margin-bottom: 10px;
+  width: 100%;
 }

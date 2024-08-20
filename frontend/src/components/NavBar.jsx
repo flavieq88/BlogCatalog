@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../reducers/userReducer";
 import { notify } from "../reducers/notifReducer";
 
+import "./navbar.css";
+
 const NavBar = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -14,13 +16,33 @@ const NavBar = () => {
   };
 
   return (
-    <div>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/">Blogs</NavLink>
-      <NavLink to="/users">Users</NavLink>
+    <div className="navbar">
+      <li className="logo">
+        <strong>BlogCatalog</strong>
+      </li>
+      <li>
+        <NavLink to="/" className=".navblock">
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/blogs" className=".navblock">
+          Blogs
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/users" className=".navblock">
+          Users
+        </NavLink>
+      </li>
+
       <div style={{ float: "right" }}>
-        {`${user.name} is signed in `}
-        <button onClick={handleLogout}>Log out</button>
+        <li className="navblock">{`${user.name} is signed in `}</li>
+        <li>
+          <button onClick={handleLogout} className="navbutton">
+            Log out
+          </button>
+        </li>
       </div>
     </div>
   );

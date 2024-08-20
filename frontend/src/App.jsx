@@ -16,6 +16,7 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import Users from "./components/Users";
 import User from "./components/User";
+import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 
 const App = () => {
@@ -53,7 +54,9 @@ const App = () => {
   if (!user) {
     return (
       <div>
-        <h1>BlogCatalog</h1>
+        <div className="headerLogin">
+          <strong>BlogCatalog</strong>
+        </div>
         <Notification />
         <h2>Log in to BlogCatalog</h2>
         <LoginForm />
@@ -65,11 +68,11 @@ const App = () => {
 
   return (
     <div>
-      <h1>BlogCatalog</h1>
       <NavBar />
       <Notification />
       <Routes>
-        <Route path="/" element={<BlogList />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/blogs" element={<BlogList />} />
         <Route path="/blogs/:id" element={<Blog blog={individualBlog} />} />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User user={individualUser} />} />
