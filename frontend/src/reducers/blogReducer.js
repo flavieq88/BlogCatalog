@@ -78,15 +78,29 @@ export const commentBlog = (text, blog) => {
         ),
       );
     } catch (exception) {
-      dispatch(
-        notify(
-          {
-            message: "Failed to add comment",
-            color: "red",
-          },
-          2,
-        ),
-      );
+      if (exception.response.status === 401) {
+        window.localStorage.removeItem("loggedBlogAppUser");
+        dispatch(clearUser());
+        dispatch(
+          notify(
+            {
+              message: "Failed to add blog, session expired",
+              color: "red",
+            },
+            2,
+          ),
+        );
+      } else {
+        dispatch(
+          notify(
+            {
+              message: "Failed to add comment",
+              color: "red",
+            },
+            2,
+          ),
+        );
+      }
     }
   };
 };

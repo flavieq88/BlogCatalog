@@ -6,7 +6,7 @@ const middleware = require("../utils/middleware");
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({})
     .populate("user", { username: 1, name: 1 })
-    .populate("comments", { text: 1, user: 1 });
+    .populate("comments", { text: 1, user: 1, username: 1 });
   response.json(blogs);
 });
 
@@ -102,6 +102,7 @@ blogsRouter.post(
         blog: id,
         text,
         user: user.id,
+        username: user.username,
       });
 
       const savedComment = await comment.save();

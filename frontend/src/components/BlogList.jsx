@@ -39,7 +39,7 @@ const BlogList = () => {
   return (
     <div>
       <BlogForm />
-      <h3>Blogs</h3>
+      <h3>Browse blogs</h3>
       <SortMenu />
       {blogs.map((blog) => (
         <SingleBlog key={blog.id} blog={blog} />

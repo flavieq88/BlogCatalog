@@ -70,11 +70,15 @@ const Blog = ({ blog }) => {
           <button onClick={() => handleDelete(blog)}>Delete blog</button>
         )}
         <h4>Comments</h4>
+        <p>
+          {`${blog.comments.length} comment`}
+          {blog.comments.length !== 1 && "s"}
+        </p>
         {blog.comments.length === 0
-          ? "No comments"
+          ? "Be the first to comment on this blog post!"
           : blog.comments.map((comment) => (
               <div key={comment.id}>
-                {comment.text} {comment.user}
+                {comment.text} - {comment.username}
               </div>
             ))}
         <form onSubmit={handleComment}>

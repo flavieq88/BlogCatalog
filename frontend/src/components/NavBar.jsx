@@ -13,14 +13,15 @@ const NavBar = () => {
     dispatch(notify({ message: "Successfully signed out", color: "green" }, 2));
   };
 
-  const label = user ? "Log out" : "Log in";
-
   return (
     <div>
+      <NavLink to="/">Home</NavLink>
       <NavLink to="/">Blogs</NavLink>
       <NavLink to="/users">Users</NavLink>
-      {`${user.name} is signed in.`}
-      <button onClick={handleLogout}>{label}</button>
+      <div style={{ float: "right" }}>
+        {`${user.name} is signed in `}
+        <button onClick={handleLogout}>Log out</button>
+      </div>
     </div>
   );
 };
