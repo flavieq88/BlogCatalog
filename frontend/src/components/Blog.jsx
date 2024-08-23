@@ -22,6 +22,7 @@ const Blog = ({ blog }) => {
   const blogStyle = {
     width: "95%",
     paddingTop: 10,
+    paddingBottom: 20,
     border: "solid",
     borderWidth: 1,
     borderColor: "gray",
@@ -64,6 +65,24 @@ const Blog = ({ blog }) => {
     borderBottom: "1px dotted black",
   };
 
+  const commentStyle = {
+    textAlign: "justify",
+    margin: "auto",
+    marginBottom: 7,
+  };
+
+  const commentDivStyle = {
+    textAlign: "center",
+    width: "60%",
+    margin: "auto",
+    borderStyle: "dashed",
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 12,
+    padding: 10,
+    paddingBottom: 7,
+  };
+
   return (
     <div style={blogStyle} className="blog">
       <h2>
@@ -95,26 +114,29 @@ const Blog = ({ blog }) => {
         {label}
       </button>
       <div style={hiddenBlogStyle} className="extendedInfo">
-        <p>
+        <div>
           {`${blog.comments.length} comment`}
           {blog.comments.length !== 1 && "s"}
-        </p>
-        {blog.comments.length === 0
-          ? "Be the first to comment on this blog post!"
-          : blog.comments.map((comment) => (
-              <div key={comment.id}>
-                {comment.text} --{" "}
-                <Link to={`/users/${comment.user}`} style={linkStyle}>
-                  {comment.username}
-                </Link>
-              </div>
-            ))}
+        </div>
         <form onSubmit={handleComment}>
           <input {...comment} />
           <button type="submit" className="smallButton">
             Comment
           </button>
         </form>
+        <br />
+        <div style={commentDivStyle}>
+          {blog.comments.length === 0
+            ? "Be the first to comment on this blog post!"
+            : blog.comments.map((comment) => (
+                <div key={comment.id} style={commentStyle}>
+                  <Link to={`/users/${comment.user}`} style={linkStyle}>
+                    {comment.username}
+                  </Link>
+                  : {comment.text}
+                </div>
+              ))}
+        </div>
       </div>
     </div>
   );

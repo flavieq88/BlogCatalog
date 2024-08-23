@@ -8,8 +8,10 @@ const Home = () => {
   return (
     <div>
       <h1>Welcome to BlogCatalog!</h1>
-      BlogCatalog is a platform to share, find and discuss new blogs with other
-      blog enthusiasts!
+      <p>
+        BlogCatalog is a platform to share, find and discuss all types of blogs
+        with other blog enthusiasts!
+      </p>
       <button onClick={() => navigate("/blogs")} className="submitButton">
         Browse all blogs
       </button>
