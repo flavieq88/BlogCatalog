@@ -58,7 +58,7 @@ const App = () => {
           <strong>BlogCatalog</strong>
         </div>
         <Notification />
-        <h2>Log in to BlogCatalog</h2>
+        <h1>Log in to BlogCatalog</h1>
         <LoginForm />
         <br />
         <SignupForm />

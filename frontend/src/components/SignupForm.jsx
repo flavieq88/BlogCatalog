@@ -44,7 +44,7 @@ const SignupForm = () => {
 
   return (
     <div className="signupForm">
-      <h4>Don't own an account? Sign up for free!</h4>
+      <h2>Don't own an account? Sign up for free!</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <input {...username} />
