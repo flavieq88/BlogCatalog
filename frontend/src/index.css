@@ -7,6 +7,7 @@
 body {
   margin: 0;
   margin-top: 85px;
+  margin-bottom: 25px;
 }
 
 .headerLogin {
@@ -19,4 +20,138 @@ body {
   text-align: left;
   margin-bottom: 10px;
   width: 100%;
+}
+
+.loginForm {
+  text-align: center;
+}
+
+.buttonLogin,
+.submitButton {
+  background-color: #04aa6d;
+  border: none;
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  font-size: large;
+  border-radius: 12px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.deleteButton {
+  background-color: #ce5626;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  font-size: medium;
+  border-radius: 12px;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.smallButton {
+  background-color: #3b8aca;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  font-size: small;
+  border-radius: 12px;
+  margin: 10px;
+}
+input {
+  width: 30%;
+  padding: 8px 20px;
+  margin: 4px 8px;
+  box-sizing: border-box;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  border-radius: 12px;
+  font-size: medium;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  font-size: large;
+}
+
+.tooltip .tooltiptext {
+  width: 210px;
+  visibility: hidden;
+  background-color: #1e1c27;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  margin: 0 4px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+select {
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 10px;
+  font-family: "Rockwell Extra Bold", "Rockwell Bold", monospace;
+  text-align: center;
+}
+
+select option {
+  text-align: left;
+}
+
+.singleBlog a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+}
+
+.singleBlog a:hover {
+  background-color: #e5e7e7;
+  border-radius: 12px;
+}
+
+table {
+  background-color: white;
+  border-spacing: 0;
+  width: 60%;
+  margin: auto;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #1e1c27;
+  color: white;
+  font-size: larger;
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(229, 231, 231);
 }

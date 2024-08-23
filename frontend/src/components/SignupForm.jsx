@@ -47,15 +47,29 @@ const SignupForm = () => {
       <h4>Don't own an account? Sign up for free!</h4>
       <form onSubmit={handleSubmit}>
         <div>
-          <input {...username} /> (3 characters minimum)
+          <input {...username} />
+          <div className="tooltip">
+            <strong>&#9432;</strong>{" "}
+            <span className="tooltiptext">3 characters minimum</span>
+          </div>
         </div>
         <div>
-          <input {...name} /> (3 characters minimum)
+          <input {...name} />
+          <div className="tooltip">
+            <strong>&#9432;</strong>{" "}
+            <span className="tooltiptext">3 characters minimum</span>
+          </div>
         </div>
         <div>
-          <input {...password} /> (8 characters minimum)
+          <input {...password} />
+          <div className="tooltip">
+            <strong>&#9432;</strong>{" "}
+            <span className="tooltiptext">8 characters minimum</span>
+          </div>
         </div>
-        <button type="submit">Sign up</button>
+        <button type="submit" className="buttonLogin">
+          Sign up
+        </button>
       </form>
     </div>
   );

@@ -47,6 +47,15 @@ export const likeBlog = (blog) => {
       dispatch(
         updateBlog({ ...response, user: blog.user, comments: blog.comments }),
       );
+      dispatch(
+        notify(
+          {
+            message: `You liked ${changedBlog.title}`,
+            color: "green",
+          },
+          2,
+        ),
+      );
     } catch (exception) {
       dispatch(
         notify(

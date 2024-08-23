@@ -55,7 +55,11 @@ blogsRouter.delete(
       }
 
       if (blog.user.toString() === user.id.toString()) {
+        const comments = blog.comments;
         await Blog.findByIdAndDelete(request.params.id);
+        comments.forEach(async (comment) => {
+          await Comment.findByIdAndDelete(comment);
+        });
         response.status(204).end();
       } else {
         response.status(401).json({ error: "invalid user for this action" });

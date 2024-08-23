@@ -11,7 +11,7 @@ const SortMenu = () => {
 
   return (
     <div>
-      Sort blogs by:&nbsp;
+      Sort blogs by
       <select name="sort" id="sort" onChange={changeSelect} value={filter}>
         <option value="likes">likes</option>
         <option value="title">title</option>

@@ -6,16 +6,18 @@ import { Link } from "react-router-dom";
 
 export const SingleBlog = ({ blog }) => {
   const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
     border: "solid",
     borderWidth: 1,
-    borderColor: "lightgrey",
+    borderColor: "gray",
+    margin: "auto",
     marginBottom: 5,
     background: "white",
+    textDecoration: "none",
+    width: "95%",
+    borderRadius: 12,
   };
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="singleBlog">
       <Link to={`/blogs/${blog.id}`}>
         {blog.title}, by {blog.author}
       </Link>
@@ -37,7 +39,8 @@ const BlogList = () => {
 
   return (
     <div>
-      <h3>Browse blogs</h3>
+      <h1>Blogs</h1>
+      <h2>Browse all blogs</h2>
       <SortMenu />
       {blogs.map((blog) => (
         <SingleBlog key={blog.id} blog={blog} />

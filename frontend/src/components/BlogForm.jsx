@@ -6,9 +6,9 @@ import { useRef } from "react";
 import Togglable from "./Togglable";
 
 const BlogForm = () => {
-  const [title, titleActions] = useField("text", "Write title here");
-  const [author, authorActions] = useField("text", "Write author name here");
-  const [url, urlActions] = useField("text", "Write URL here");
+  const [title, titleActions] = useField("text", "Title");
+  const [author, authorActions] = useField("text", "Author");
+  const [url, urlActions] = useField("text", "URL");
 
   const dispatch = useDispatch();
 
@@ -39,15 +39,17 @@ const BlogForm = () => {
         <h3>Create a new blog:</h3>
         <form onSubmit={createBlog}>
           <div>
-            Title: <input {...title} />
+            <input {...title} />
           </div>
           <div>
-            Author: <input {...author} />
+            <input {...author} />
           </div>
           <div>
-            URL: <input {...url} />
+            <input {...url} />
           </div>
-          <button type="submit">Create</button>
+          <button type="submit" className="submitButton">
+            Post
+          </button>
         </form>
       </Togglable>
     </div>

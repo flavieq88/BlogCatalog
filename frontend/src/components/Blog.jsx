@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, removeBlog, commentBlog } from "../reducers/blogReducer";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useField } from "../hooks";
 
@@ -20,13 +20,15 @@ const Blog = ({ blog }) => {
   }
 
   const blogStyle = {
+    width: "95%",
     paddingTop: 10,
-    paddingLeft: 2,
     border: "solid",
     borderWidth: 1,
-    borderColor: "lightgrey",
-    marginBottom: 5,
-    background: extended ? "lightgrey" : "white",
+    borderColor: "gray",
+    margin: "auto",
+    background: extended ? "rgb(229, 231, 231)" : "white",
+    borderRadius: 12,
+    overflow: "hidden",
   };
 
   const hiddenBlogStyle = {
@@ -56,20 +58,43 @@ const Blog = ({ blog }) => {
     commentActions.reset();
   };
 
+  const linkStyle = {
+    color: "black",
+    textDecoration: "none",
+    borderBottom: "1px dotted black",
+  };
+
   return (
     <div style={blogStyle} className="blog">
-      {blog.title}, by {blog.author}{" "}
-      <button onClick={toggleExtended}>{label}</button> <br />
+      <h2>
+        {blog.title}, by {blog.author}
+      </h2>
+      <a href={blog.url}>{blog.url}</a> <br />
+      {blog.likes} like{blog.likes !== 1 && "s"}
+      <button onClick={() => handleLike(blog)} className="smallButton">
+        Like
+      </button>{" "}
+      <br />
+      Blog added by user{" "}
+      <Link to={`/users/${blog.user.id}`} style={linkStyle}>
+        {blog.user.username}
+      </Link>{" "}
+      <br />
+      {blog.user.username === user.username && (
+        <button onClick={() => handleDelete(blog)} className="deleteButton">
+          Delete blog
+        </button>
+      )}
+      <br />
+      <strong style={{ fontSize: "large" }}>Comments:</strong>
+      <button
+        onClick={toggleExtended}
+        className="smallButton"
+        style={{ backgroundColor: "gray" }}
+      >
+        {label}
+      </button>
       <div style={hiddenBlogStyle} className="extendedInfo">
-        <a href={blog.url}>{blog.url}</a> <br />
-        {blog.likes} like{blog.likes !== 1 && "s"}{" "}
-        <button onClick={() => handleLike(blog)}>Like</button>
-        <br />
-        Blog added by user {blog.user.username} <br />
-        {blog.user.username === user.username && (
-          <button onClick={() => handleDelete(blog)}>Delete blog</button>
-        )}
-        <h4>Comments:</h4>
         <p>
           {`${blog.comments.length} comment`}
           {blog.comments.length !== 1 && "s"}
@@ -78,12 +103,17 @@ const Blog = ({ blog }) => {
           ? "Be the first to comment on this blog post!"
           : blog.comments.map((comment) => (
               <div key={comment.id}>
-                {comment.text} - {comment.username}
+                {comment.text} --{" "}
+                <Link to={`/users/${comment.user}`} style={linkStyle}>
+                  {comment.username}
+                </Link>
               </div>
             ))}
         <form onSubmit={handleComment}>
           <input {...comment} />
-          <button type="submit">Comment</button>
+          <button type="submit" className="smallButton">
+            Comment
+          </button>
         </form>
       </div>
     </div>

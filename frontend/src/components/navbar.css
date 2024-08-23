@@ -25,7 +25,7 @@ li a {
 }
 
 li a:hover {
-  background-color: #666565;
+  background-color: #575757;
 }
 
 .navblock {
@@ -57,4 +57,5 @@ li a:hover {
   border-radius: 12px;
   margin-top: 7px;
   margin-right: 9px;
+  cursor: pointer;
 }
