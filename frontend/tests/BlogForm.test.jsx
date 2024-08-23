@@ -7,12 +7,12 @@ describe("<BlogForm />", () => {
     const createBlog = vi.fn();
     const user = userEvent.setup();
 
-    render(<BlogForm addBlog={createBlog} />);
+    render(<BlogForm />);
 
-    const titleInput = screen.getByPlaceholderText("Write title");
-    const authorInput = screen.getByPlaceholderText("Write author");
-    const urlInput = screen.getByPlaceholderText("Write URL");
-    const sendButton = screen.getByText("Create");
+    const titleInput = screen.getByPlaceholderText("Title");
+    const authorInput = screen.getByPlaceholderText("Author");
+    const urlInput = screen.getByPlaceholderText("URL");
+    const sendButton = screen.getByText("Post");
 
     await user.type(titleInput, "The best blog");
     await user.type(authorInput, "Me");
