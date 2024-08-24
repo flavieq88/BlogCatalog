@@ -8,6 +8,7 @@ const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
+const path = require("path");
 
 mongoose.set("strictQuery", false);
 
@@ -32,6 +33,10 @@ app.use(middleware.tokenExtractor);
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve("./dist", "index.html"));
+}); //fix client side routing
 
 if (process.env.NODE_ENV === "test") {
   const testingRouter = require("./controllers/testing");
